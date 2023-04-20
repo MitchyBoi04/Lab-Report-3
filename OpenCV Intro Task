@@ -1,0 +1,85 @@
+#include <iostream>
+#include <stdio.h>
+#include "opencv2/core.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+
+
+using namespace std;
+using namespace cv;
+
+int main()
+
+{
+    Mat newImage = imread("BlueApple.png");
+
+    if (newImage.data == NULL)
+
+    {
+        cout << "No image found! Check path." << endl;
+        return 1;
+    }
+
+    else
+
+    {
+        Mat hsvImage;
+        cvtColor(newImage, hsvImage, COLOR_BGR2HSV);
+
+        Mat blueGrayscale, redGrayscale, greenGrayscale;
+        Mat redMask1, redMask2;
+
+        inRange(hsvImage, Scalar(80,50,50), Scalar(130,255,255), blueGrayscale);
+
+        inRange(hsvImage, Scalar(35,100,100), Scalar(110,255,255), greenGrayscale);
+
+        Scalar redLower1 = Scalar(0,100,100);
+        Scalar redUpper1 = Scalar(10,255,255);
+        Scalar redLower2 = Scalar(150,100,100);
+        Scalar redUpper2 = Scalar(180,255,255);
+        inRange(hsvImage, redLower1, redUpper1, redMask1);
+        inRange(hsvImage, redLower2, redUpper2, redMask2);
+        bitwise_or(redMask1, redMask2, redGrayscale);
+
+        int bluePixels = 0;
+        bluePixels = countNonZero(blueGrayscale);
+        std::cout << "Blue Pixels = " << bluePixels << std::endl;
+
+        int greenPixels = 0;
+        greenPixels = countNonZero(greenGrayscale);
+        std::cout << "Green Pixels = " << greenPixels << std::endl;
+
+        int redPixels = 0;
+        redPixels = countNonZero(redGrayscale);
+        std::cout << "Red Pixels = " << redPixels << std::endl;
+
+        if (bluePixels > greenPixels && bluePixels > redPixels)
+
+        {
+            printf("This image is blue");
+            imshow("BGR image", newImage);
+            imshow("HSV image", blueGrayscale);
+            waitKey(0);
+        }
+
+        else if (greenPixels > bluePixels && greenPixels > redPixels)
+
+        {
+            printf("This image is green");
+            imshow("BGR image", newImage);
+            imshow("HSV image", greenGrayscale);
+            waitKey(0);
+        }
+
+        else if (redPixels > bluePixels && redPixels > greenPixels)
+
+        {
+            printf("This image is red");
+            imshow("BGR image", newImage);
+            imshow("HSV image", redGrayscale);
+            waitKey(0);
+        }
+
+    }
+
+}
