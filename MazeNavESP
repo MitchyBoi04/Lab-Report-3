@@ -14,7 +14,7 @@
 
 bfs::Mpu6500 imu;
 
- LiquidCrystal lcd(19, 23, 27, 33 , 14, 15); // MAY HAVE TO CHANGE THESE PINS
+LiquidCrystal lcd(19, 23, 27, 33 , 14, 15); // MAY HAVE TO CHANGE THESE PINS
 int navArray[50][2];
 int direction,magnitude,count,x,y,needangle,b;
 int vtemp=1;
